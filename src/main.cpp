@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
 #include <datatypes.hpp>
@@ -18,7 +17,7 @@ latlng waypoints[4] = {
     {28.599586f, -81.202147f}};
 int waypointSelect = 0;
 
-#ifndef CALIBRATE
+#ifdef RUN
 void setup()
 {
   int waypointSelect = 0; // reset the waypoint select to target the starting waypoint
@@ -73,7 +72,7 @@ void loop()
   double steeringCorrectionLEFT = 0.0;
   double steeringCorrectionRIGHT = 0.0;
 }
-#endif // !CALIBRATE
+#endif // !RUN
 
 #ifdef CALIBRATE
 
