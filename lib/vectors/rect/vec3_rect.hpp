@@ -4,7 +4,6 @@
 class Vec3_Rect : public vec3
 {
 public:
-  double x, y, z;
   Vec3_Rect(double x, double y, double) : vec3(x, y, z){};
   Vec3_Rect(Vec3_Rect &&) = default;
   Vec3_Rect(const Vec3_Rect &) = default;

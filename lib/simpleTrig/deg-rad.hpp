@@ -1,0 +1,6 @@
+#ifndef B63EFAE1_8A59_4ACF_B55E_E01D8DF9FE6E
+#define B63EFAE1_8A59_4ACF_B55E_E01D8DF9FE6E
+double deg2rad(double x);
+double rad2deg(double x);
+
+#endif /* B63EFAE1_8A59_4ACF_B55E_E01D8DF9FE6E */
