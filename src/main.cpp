@@ -2,7 +2,8 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
-#include "datatypes.hpp"
+#include <datatypes.hpp>
+#include <deg-min-sec.hpp>
 
 #define MOTOR_LEFT 27
 #define MOTOR_RIGHT 26
@@ -70,4 +71,5 @@ void loop()
   latlng pos = {0, 0};
 
   // now lets see if we are within 2 feet of our gps position
+
 }

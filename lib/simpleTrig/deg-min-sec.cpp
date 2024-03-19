@@ -1,4 +1,5 @@
 #include "deg-min-sec.hpp"
+#include <datatypes.hpp>
 /**
  * @brief converts decimal coordinate to Degrees,minutes, seconds
  *
