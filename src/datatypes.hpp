@@ -8,4 +8,10 @@ typedef struct
   vec3 rotation;
 } imu_data;
 
+typedef struct
+{
+  double lat;
+  double lng;
+} latlng;
+
 #endif /* B65AEEAF_70F8_484E_8503_C1E922B7EB3C */
