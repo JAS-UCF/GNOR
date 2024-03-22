@@ -5,13 +5,15 @@
 #include <deg-min-sec.hpp>
 #include "config.h"
 #include "calibrate.h"
-#include <PID_RT.h>
+
+#include "pico/time.h"
+#include "hardware/irq.h"
+#include "hardware/pwm.h"
 
 #define MOTOR_LEFT 27
 #define MOTOR_RIGHT 26
 
 QMC5883LCompass compass;
-PID_RT PID;
 
 #ifdef RUN
 
@@ -30,23 +32,13 @@ void setup()
   pinMode(MOTOR_LEFT, OUTPUT);  // init left
   pinMode(MOTOR_RIGHT, OUTPUT); // init right
 
-  // Adjust PWM properties if needed
-  /*
-  analogWriteFreq(5000);
-  analogWriteRange(65535);
-  analogWriteResolution(16);
-  */
+  pwm_set_gpio_level(MOTOR_LEFT, 0);
+  pwm_set_gpio_level(MOTOR_RIGHT, 0);
 
   // initalizing the COMPASS
   compass.init();
 
   delay(100); // wait 100ms
-
-  // init PID
-  PID.setOutputRange(0, 360);
-  PID.setInterval(50);
-  PID.setK(PID_GAIN, PID_INTEGRAL, PID_DERIVATIVE);
-  PID.start();
 }
 
 void loop()
@@ -85,11 +77,24 @@ void loop()
 
   double angle_between_us_waypoint = angleFromCoordinate(pos, waypoints[waypointSelect]);
 
-  PID.setPoint(angle_between_us_waypoint);
-  PID.setOutputRange(0, 360);
-  PID.compute(directionFacing);
+  double angle_delta = angle_between_us_waypoint - directionFacing;
 
-  // steering bias should help us to determine how much of each engine should be running, this will be calibrated once we get our hands one the motors & compass modules
-  double steering_bias = PID.getOutput();
+  double steering_bias = map(angle_delta, -180, 180, STEERING_CORRECTION_MIN, 1.0);
+
+  // if the angle delta is positive we turn to the left
+  // if the angle detla is negative we turn to the right
+
+  if (angle_delta > 0)
+  {
+    // turn to the left
+    pwm_set_gpio_level(MOTOR_LEFT, (0xFF * abs((uint8_t)steering_bias)) << 8);
+    pwm_set_gpio_level(MOTOR_RIGHT, 0xFF << 8);
+  }
+  else
+  {
+    // turn to the right
+    pwm_set_gpio_level(MOTOR_RIGHT, (0xFF * abs((uint8_t)steering_bias)) << 8);
+    pwm_set_gpio_level(MOTOR_LEFT, 0xFF << 8);
+  }
 }
 #endif // !RUN
