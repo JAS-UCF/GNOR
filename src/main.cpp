@@ -50,13 +50,14 @@ void loop()
   }
   // put your main code here, to run repeatedly:
 
-  // TODO, implement the GPS device, read in the serial data and interpret where we are and where we need to be
-
   // tells the compass to read in our values
   compass.read();
 
+  // TODO, implement the GPS device, read in the serial data and interpret where we are and where we need to be
   // this is where we can read in the GPS position we are in
   // assuming we have some latlng of our current position
+  // currently we are setting to {0,0}
+  // this needs to be set to our true position
   latlng pos = {0, 0};
 
   // now lets see if we are within 2 feet of our gps position
