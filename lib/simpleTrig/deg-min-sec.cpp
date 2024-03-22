@@ -67,3 +67,27 @@ double distanceLatLngA_x_fromLatLngB(latlng A, latlng B, double x)
 {
   return -1.0;
 }
+
+/**
+ * @brief calculates the angle between 2 latlng coordinates
+ *
+ * @param coord1 coordinate 1 to base measurements from
+ * @param coord2 coordinate 2 (the resultant point)
+ * @return double angle in degrees
+ */
+double angleFromCoordinate(latlng coord1, latlng coord2)
+{
+
+  double dLon = (coord2.lng - coord1.lng);
+
+  double y = sin(dLon) * cos(coord2.lat);
+  double x = cos(coord1.lat) * sin(coord2.lat) - sin(coord1.lat) * cos(coord2.lat) * cos(dLon);
+
+  double brng = atan2(y, x);
+
+  brng = RAD_TO_DEG * (brng);
+  brng = fmod((brng + 360.0), 360);
+  brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+
+  return brng;
+}

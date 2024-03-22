@@ -3,9 +3,9 @@
 
 double rad2deg(double x)
 {
-  return x / (PI / 180);
+  return x * RAD_TO_DEG;
 }
 double deg2rad(double x)
 {
-  return x * (PI / 180);
+  return x * DEG_TO_RAD;
 }

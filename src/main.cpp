@@ -4,20 +4,23 @@
 #include <datatypes.hpp>
 #include <deg-min-sec.hpp>
 #include "config.h"
+#include "calibrate.h"
+#include <PID_RT.h>
 
 #define MOTOR_LEFT 27
 #define MOTOR_RIGHT 26
 
 QMC5883LCompass compass;
-
-latlng waypoints[4] = {
-    {28.599610f, -81.201771f},
-    {28.599756f, -81.201840f},
-    {28.599730f, -81.202067f},
-    {28.599586f, -81.202147f}};
-int waypointSelect = 0;
+PID_RT PID;
 
 #ifdef RUN
+
+static const latlng waypoints[4] = {
+    {28.599610, -81.201771},
+    {28.599756, -81.201840},
+    {28.599730, -81.202067},
+    {28.599586, -81.202147}};
+int waypointSelect = 0;
 void setup()
 {
   int waypointSelect = 0; // reset the waypoint select to target the starting waypoint
@@ -38,6 +41,12 @@ void setup()
   compass.init();
 
   delay(100); // wait 100ms
+
+  // init PID
+  PID.setOutputRange(0, 360);
+  PID.setInterval(50);
+  PID.setK(PID_GAIN, PID_INTEGRAL, PID_DERIVATIVE);
+  PID.start();
 }
 
 void loop()
@@ -71,43 +80,16 @@ void loop()
   // any steering correction cannot exceede 1, and may not fall below STEERING_CORRECTION_MIN
   double steeringCorrectionLEFT = 0.0;
   double steeringCorrectionRIGHT = 0.0;
+  double directionFacing = 360 - (compass.getAzimuth() - 90); // get the direction in degrees we are facing
+  // we need to subtract by 90 b/c azimuth uses 360 / 0 as up, where for any trig function to work, we need to rotate our perspective 90°
+
+  double angle_between_us_waypoint = angleFromCoordinate(pos, waypoints[waypointSelect]);
+
+  PID.setPoint(angle_between_us_waypoint);
+  PID.setOutputRange(0, 360);
+  PID.compute(directionFacing);
+
+  // steering bias should help us to determine how much of each engine should be running, this will be calibrated once we get our hands one the motors & compass modules
+  double steering_bias = PID.getOutput();
 }
 #endif // !RUN
-
-#ifdef CALIBRATE
-
-void setup()
-{
-  Serial.begin(9600);
-  compass.init();
-
-  Serial.println("This will provide calibration settings for your QMC5883L chip. When prompted, move the magnetometer in all directions until the calibration is complete.");
-  Serial.println("Calibration will begin in 5 seconds.");
-  delay(5000);
-
-  Serial.println("CALIBRATING. Keep moving your sensor...");
-  compass.calibrate();
-
-  Serial.println("DONE. Copy the lines below and paste it into your projects sketch.);");
-  Serial.println();
-  Serial.print("compass.setCalibrationOffsets(");
-  Serial.print(compass.getCalibrationOffset(0));
-  Serial.print(", ");
-  Serial.print(compass.getCalibrationOffset(1));
-  Serial.print(", ");
-  Serial.print(compass.getCalibrationOffset(2));
-  Serial.println(");");
-  Serial.print("compass.setCalibrationScales(");
-  Serial.print(compass.getCalibrationScale(0));
-  Serial.print(", ");
-  Serial.print(compass.getCalibrationScale(1));
-  Serial.print(", ");
-  Serial.print(compass.getCalibrationScale(2));
-  Serial.println(");");
-}
-
-void loop()
-{
-  delay(1000);
-}
-#endif // DEBUG
