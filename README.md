@@ -10,3 +10,4 @@ Talks about calibrating the MPU6050
 ### TODO
 
 implement a setup1() and loop1() functions to read from the compass and the GPS
+<https://arduino-pico.readthedocs.io/en/latest/multicore.html>
