@@ -91,11 +91,17 @@ void loop()
     pwm_set_gpio_level(MOTOR_LEFT, (0xFF * abs((uint8_t)steering_bias)) << 8);
     pwm_set_gpio_level(MOTOR_RIGHT, 0xFF << 8);
   }
-  else
+  else if (angle_delta < 0)
   {
     // turn to the right
     pwm_set_gpio_level(MOTOR_RIGHT, (0xFF * abs((uint8_t)steering_bias)) << 8);
     pwm_set_gpio_level(MOTOR_LEFT, 0xFF << 8);
+  }
+  else
+  {
+    // if somehow we get 0 (just for error safety)
+    pwm_set_gpio_level(MOTOR_LEFT, 0xFF << 8);
+    pwm_set_gpio_level(MOTOR_RIGHT, 0xFF << 8);
   }
 }
 #endif // !RUN
