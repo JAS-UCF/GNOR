@@ -91,8 +91,6 @@ void loop()
   // using the angle from where we are facing to where we need to be facing, we can begin correcting for this using a correction factor
   // these factors will be multiplied in, when taking into account the propultion of the 2 motors, using this, we can steer and move forward
   // any steering correction cannot exceede 1, and may not fall below STEERING_CORRECTION_MIN
-  double steeringCorrectionLEFT = 0.0;
-  double steeringCorrectionRIGHT = 0.0;
   double directionFacing = 360 - (compass.getAzimuth() - 90); // get the direction in degrees we are facing
   // we need to subtract by 90 b/c azimuth uses 360 / 0 as up, where for any trig function to work, we need to rotate our perspective 90°
 
