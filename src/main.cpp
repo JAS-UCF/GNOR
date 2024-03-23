@@ -9,6 +9,7 @@
 #include "pico/time.h"
 #include "hardware/irq.h"
 #include "hardware/pwm.h"
+#include "pico/multicore.h"
 
 #define MOTOR_LEFT 27
 #define MOTOR_RIGHT 26
@@ -35,19 +36,38 @@ void setup()
   pwm_set_gpio_level(MOTOR_LEFT, 0);
   pwm_set_gpio_level(MOTOR_RIGHT, 0);
 
-  // initalizing the COMPASS
-  compass.init();
-
   delay(100); // wait 100ms
+}
+
+void setup1()
+{
+  compass.init();
+}
+
+void loop1()
+{
+  // TODO
+  /*
+    Integrate the compass code in here, read in the compass information and pass it to a global compass object
+    Integrate the GPS module in here, and pass it to a global GPS object
+  */
+  compass.read();
 }
 
 void loop()
 {
   // if we are done
-  if (waypointSelect = sizeof(waypoints) / sizeof(latlng))
+  if (waypointSelect = (sizeof(waypoints) / sizeof(latlng)))
   {
     return;
   }
+
+  // TODO
+  /*
+  Read in the global GPS object and make computations from there
+  Read in the global COMPASS object and make computations from there
+  */
+
   // put your main code here, to run repeatedly:
 
   // tells the compass to read in our values
