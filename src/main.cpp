@@ -5,6 +5,7 @@
 #include <deg-min-sec.hpp>
 #include "config.h"
 #include "calibrate.h"
+#include <TinyGPSPlus.h>
 
 #include "pico/time.h"
 #include "hardware/irq.h"
@@ -26,7 +27,7 @@ static const latlng waypoints[4] = {
 int waypointSelect = 0;
 void setup()
 {
-  int waypointSelect = 0; // reset the waypoint select to target the starting waypoint
+  waypointSelect = 0; // reset the waypoint select to target the starting waypoint
 
   Serial.begin(9600);
   // set pins to output
