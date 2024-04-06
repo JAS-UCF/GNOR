@@ -5,7 +5,7 @@
 // uncomment the line below if you want to compile to code into calibration mode
 
 // The lines below help the compiler decide which mode to load into, calibration or RUN
-
+#define TEST_GPS 1
 // #define CALIBRATE 1
 // #define I2C_SCAN 1
 // #define RUN 1

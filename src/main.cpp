@@ -8,6 +8,7 @@
 #include <TinyGPSPlus.h>
 #include "hardware/pwm.h"
 #include "i2c_scan.h"
+#include "test_gps.h"
 
 #define MOTOR_LEFT 27
 #define MOTOR_RIGHT 26
