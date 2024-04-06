@@ -6,11 +6,8 @@
 #include "config.h"
 #include "calibrate.h"
 #include <TinyGPSPlus.h>
-
-#include "pico/time.h"
-#include "hardware/irq.h"
 #include "hardware/pwm.h"
-#include "pico/multicore.h"
+#include "i2c_scan.h"
 
 #define MOTOR_LEFT 27
 #define MOTOR_RIGHT 26
@@ -38,41 +35,28 @@ void setup()
   pwm_set_gpio_level(MOTOR_RIGHT, 0);
 
   delay(100); // wait 100ms
-}
-
-void setup1()
-{
+  Serial.println("Initialize Compass");
   compass.init();
-}
-
-void loop1()
-{
-  // TODO
-  /*
-    Integrate the compass code in here, read in the compass information and pass it to a global compass object
-    Integrate the GPS module in here, and pass it to a global GPS object
-  */
-  compass.read();
+  delay(2000); // wait 2000ms
 }
 
 void loop()
 {
+  compass.read();
+  // Serial.println("Running");
+  Serial.println(compass.getAzimuth());
   // if we are done
-  if (waypointSelect = (sizeof(waypoints) / sizeof(latlng)))
+  if (waypointSelect == (sizeof(waypoints) / sizeof(waypoints[0])))
   {
     return;
   }
+  // debug out
 
   // TODO
   /*
   Read in the global GPS object and make computations from there
   Read in the global COMPASS object and make computations from there
   */
-
-  // put your main code here, to run repeatedly:
-
-  // tells the compass to read in our values
-  compass.read();
 
   // TODO, implement the GPS device, read in the serial data and interpret where we are and where we need to be
   // this is where we can read in the GPS position we are in
@@ -87,6 +71,9 @@ void loop()
     // set our next waypoint
     waypointSelect++;
   }
+
+  // some debug out
+  Serial.println(360 - (compass.getAzimuth() - 90));
 
   // since we need to keep moving, we need to find our bearing in comparison to the true north, then find the angle between that and the next waypoint.
   // using the angle from where we are facing to where we need to be facing, we can begin correcting for this using a correction factor

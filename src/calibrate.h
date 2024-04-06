@@ -1,9 +1,13 @@
 #ifndef EB528D13_C9D7_49AA_B375_87729973013A
 #define EB528D13_C9D7_49AA_B375_87729973013A
+#include <Arduino.h>
+#include <Wire.h>
+#include <QMC5883LCompass.h>
+#include <TinyGPSPlus.h>
 #ifdef CALIBRATE
-
 void setup()
 {
+  QMC5883LCompass compass;
   Serial.begin(9600);
   compass.init();
 

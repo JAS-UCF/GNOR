@@ -7,7 +7,8 @@
 // The lines below help the compiler decide which mode to load into, calibration or RUN
 
 // #define CALIBRATE 1
-#define RUN 1
+// #define I2C_SCAN 1
+// #define RUN 1
 
 // below are some constants that help control the PID controllers for the motor
 #define PID_GAIN 0.001
